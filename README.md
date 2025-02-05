@@ -46,7 +46,9 @@ docker container ls -a
 ````
 
 The server is running on : [http://localhost:8000](http://localhost:8000)
+
 To have the information about the api go to : [http://localhost:8000/docs](http://localhost:8000/docs)
+
 ---
 
 #### Development environment
