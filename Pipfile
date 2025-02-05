@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = {extras = ["standard"], version = "*"}
+google-cloud-storage = ">=2.19.0"
+boto3 = ">=1.35.7"
+uvicorn = ">=0.33"
+python-dotenv = ">=1.0"
+requests = "*"
+httpx = "*"
+python-multipart = "*"
+loader = "*"
+
+[dev-packages]
+pytest = ">=8.3.0"
+
+[requires]
+python_version = "3.13"

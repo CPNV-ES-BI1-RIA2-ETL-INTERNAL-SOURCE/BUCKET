@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Environnements virtuels
+venv/
+.env/
+.virtualenv/
+
+# IDEs
+.idea/
+.vscode/
+.ipynb_checkpoints/
+
+# Systèmes
+.DS_Store
+Thumbs.db
+
+# Fichiers sensibles
+*.env
+config.yaml
+config.json
+*.pem
+*.key
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Dépendances
+poetry.lock
+
+.env
