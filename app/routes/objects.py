@@ -20,3 +20,18 @@ def load_object(request: LoadRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error : {str(e)}")
+
+@router.get(apiPrefix + '/objects', response_model=ListResponse)
+def list_objects(
+    uri: str = Query(..., description="The S3 bucket URI"),
+    recurse: bool = Query(False, description="Whether to list objects recursively")
+):
+    try:
+        provider = CloudProviderFactory().get_cloud_provider(uri)
+        provider.connect()
+        objects = provider.list(recurse=recurse)
+        return ListResponse(objects=objects)
+    except DestinationNotFoundException as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error : {str(e)}")
