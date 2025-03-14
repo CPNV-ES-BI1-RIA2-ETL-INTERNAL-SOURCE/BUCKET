@@ -98,8 +98,14 @@ class AwsProvider(CloudProvider):
 
             if 'Contents' not in response:
                 return []
-
             keys = [obj['Key'] for obj in response['Contents']]
+            if not recurse:
+                # remove everything after the first '/' if it contains one keep / at the end
+                for i, key in enumerate(keys):
+                    if '/' in key:
+                        keys[i] = key.split('/')[0] + '/'
+                    else:
+                        keys[i] = key
             return keys
 
         except ClientError as e:
