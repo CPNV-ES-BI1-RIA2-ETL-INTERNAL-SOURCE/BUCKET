@@ -25,11 +25,11 @@ class TestLoad:
             json_file = json.load(file)
             payload = {
                 "data": json.dumps(json_file, indent=4),
-                "dataDestination": "s3://mock-destination-bucket/file.csv",
+                "uri": "s3://mock-destination-bucket/file.csv",
             }
 
             # When
-            response = client.post("/job", json=payload)
+            response = client.post("/api/v2/objects", json=payload)
 
             # Then
             assert response.status_code == 200
@@ -49,11 +49,11 @@ class TestLoad:
 
             payload = {
                 "data": json.dumps(json_file, indent=4),
-                "dataDestination": "s3://mock-destination-bucket/file.csv",
+                "uri": "s3://mock-destination-bucket/file.csv",
             }
 
             # When
-            response = client.post("/job", json=payload)
+            response = client.post("/api/v2/objects", json=payload)
 
             # Then
             assert response.status_code == 500

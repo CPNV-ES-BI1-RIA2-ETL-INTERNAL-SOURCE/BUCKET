@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
-class JobResponse(BaseModel):
+class LoadResponse(BaseModel):
     url: str
