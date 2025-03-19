@@ -4,6 +4,7 @@ from app.exceptions.authentication_failed_exception import AuthenticationFailedE
 from app.exceptions.destination_not_found_exception import DestinationNotFoundException
 from app.exceptions.object_alread_exist_exception import ObjectAlreadyExistException
 import boto3
+from typing import List
 
 
 class AwsProvider(CloudProvider):
@@ -77,4 +78,38 @@ class AwsProvider(CloudProvider):
                 raise DestinationNotFoundException("Destination not found!")
             if error_code == 'PreconditionFailed':
                 raise ObjectAlreadyExistException("Object already exists!")
+            raise
+
+    def list(self, recurse: bool) -> List[str]:
+        """
+        List the objects in the specified bucket.
+
+        :param recurse: whether to list recursively.
+        :return: a list of object keys.
+        :raises DestinationNotFoundException: If the bucket does not exist.
+        """
+        if not self._connection:
+            raise RuntimeError("AWS service is not connected. Call connect() first.")
+
+        try:
+            response = self._connection.list_objects_v2(
+                Bucket=self._bucket
+            )
+
+            if 'Contents' not in response:
+                return []
+            keys = [obj['Key'] for obj in response['Contents']]
+            if not recurse:
+                # remove everything after the first '/' if it contains one keep / at the end
+                for i, key in enumerate(keys):
+                    if '/' in key:
+                        keys[i] = key.split('/')[0] + '/'
+                    else:
+                        keys[i] = key
+            return keys
+
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            if error_code == 'NoSuchBucket':
+                raise DestinationNotFoundException("Destination not found!")
             raise

@@ -3,8 +3,9 @@ classDiagram
     class CloudProvider {
         <<Interface>>        
         + connect() void
-        + disconect() void
+        + disconnect() void
         + load(source : string) void
+        + list(recurse : bool) string[]
     }
     
     class CloudProviderFactory {
@@ -23,8 +24,9 @@ classDiagram
 
         + AwsProvider(accessKey : string, secretKey : string, bucket : string, region : string, destination: string)
         + connect() void 
-        + disconect() void
-        + load(source : string) void        
+        + disconnect() void
+        + load(source : string) void
+        + list(recurse : bool) string[]
     }
     
     DestinationNotFoundException <-- CloudProvider
@@ -50,15 +52,22 @@ classDiagram
     AwsProvider --> boto3
     
     
-    JobRequest <|-- BaseModel
-    class JobRequest {
-    + data: str
-    + dataDestination: str
+    LoadRequest <|-- BaseModel
+    class LoadRequest {
+    + data: string
+    + uri: string
     }
     
-    JobResponse <|-- BaseModel
-    class JobResponse {
-    + url: str
+    LoadResponse <|-- BaseModel
+    class LoadResponse {
+    + url: string
     }
+    
+    ListResponse <|-- BaseModel
+    class ListResponse {
+    + objects: string[]
+    }
+    
+    
     
 ````
