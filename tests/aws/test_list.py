@@ -49,3 +49,37 @@ class TestList:
         # Then
         assert response.status_code == 500
         assert "Access Denied" in response.json()["detail"]
+
+    @patch("boto3.client")
+    def test_list_objects_success_with_recurse(self, mock_boto_client):
+        # Mock the boto3 S3 client
+        mock_s3_client = Mock()
+        mock_boto_client.return_value = mock_s3_client
+
+        # Mock the response from list_objects_v2
+        mock_s3_client.list_objects_v2.return_value = {
+            "Contents": [
+                {"Key": "folder/folder2/folder3/file.csv"},
+                {"Key": "folder/file1.txt"},
+                {"Key": "file2.txt"}
+            ]
+        }
+
+        # Given
+        client = self.client_init()
+        params = {
+            "recurse": True
+        }
+
+        # When
+        response = client.get("/api/v2/objects", params=params)
+
+        # Then
+        assert response.status_code == 200
+        assert response.json() == {
+            "objects": [
+                "folder/folder2/folder3/file.csv",
+                "folder/file1.txt",
+                "file2.txt"
+            ]
+        }
