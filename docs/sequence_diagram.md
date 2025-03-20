@@ -8,12 +8,11 @@ sequenceDiagram
     
     main ->>+ AwsProvider : connect()
     activate AwsProvider
-    main ->>- AwsProvider : load(string)
+    main ->>- AwsProvider : load(string, string)
     AwsProvider ->>+ boto3 : put_object(string)
     activate boto3
     boto3 -->>- AwsProvider : sdk response
     AwsProvider -->> main : response
-    
 
     activate main
     main ->>+ AwsProvider : connect()
