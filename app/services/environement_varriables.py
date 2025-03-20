@@ -31,7 +31,7 @@ def get_env_variables(file=".env", variables=None):
 
     if variables_missing:
         raise EnvironmentVariableException(
-            f"Theses following varriables ar missing in the {file} file : {', '.join(variables_missing)}")
+            f"Theses following variables ar missing in the {file} file : {', '.join(variables_missing)}")
 
 
     return {var: os.getenv(var) for var in variables}
