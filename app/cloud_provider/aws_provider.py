@@ -11,12 +11,11 @@ class AwsProvider(CloudProvider):
     """
     Service to interact with AWS S3.
     """
-    def __init__(self, access_key: str, secret_key: str, bucket: str, region: str, destination: str) -> None:
+    def __init__(self, access_key: str, secret_key: str, bucket: str, region: str) -> None:
         self._access_key = access_key
         self._secret_key = secret_key
         self._bucket = bucket
         self._region_name = region
-        self._destination_name = destination
         self._connection = None  # Initialize the connection to None
 
     def connect(self) -> None:
@@ -43,11 +42,12 @@ class AwsProvider(CloudProvider):
         self._connection.close()
         self._connection = None  # Optional, but explicit
 
-    def load(self, data: str) -> str:
+    def load(self, data: str, destination: str) -> str:
         """
         Upload a binary object to the specified bucket.
 
         :param data: data to upload.
+        :param destination: destination name.
         :raises DestinationNotFoundException: If the bucket does not exist.
         :raises ObjectAlreadyExistException: If a precondition conflict occurs.
         """
@@ -57,7 +57,7 @@ class AwsProvider(CloudProvider):
         try:
             self._connection.put_object(
                 Bucket=self._bucket,
-                Key=self._destination_name,
+                Key=destination,
                 Body=data
             )
 
@@ -65,7 +65,7 @@ class AwsProvider(CloudProvider):
                 ClientMethod='get_object',
                 Params={
                     'Bucket': self._bucket,
-                    'Key': self._destination_name
+                    'Key': destination
                 },
                 ExpiresIn=604800
             )
@@ -75,7 +75,7 @@ class AwsProvider(CloudProvider):
         except ClientError as e:
             error_code = e.response['Error']['Code']
             if error_code == 'NoSuchBucket':
-                raise DestinationNotFoundException("Destination not found!")
+                raise DestinationNotFoundException("Destination bucket not found!")
             if error_code == 'PreconditionFailed':
                 raise ObjectAlreadyExistException("Object already exists!")
             raise
@@ -100,7 +100,6 @@ class AwsProvider(CloudProvider):
                 return []
             keys = [obj['Key'] for obj in response['Contents']]
             if not recurse:
-                # remove everything after the first '/' if it contains one keep / at the end
                 for i, key in enumerate(keys):
                     if '/' in key:
                         keys[i] = key.split('/')[0] + '/'

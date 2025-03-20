@@ -7,7 +7,7 @@ class CloudProvider:
     def disconnect(self) -> None:
         pass
 
-    def load(self, data: str) -> str:
+    def load(self, data: str, destination: str) -> str:
         pass
 
     def list(self, recurse: bool) -> List[str]:

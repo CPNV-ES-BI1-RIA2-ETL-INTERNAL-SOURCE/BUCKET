@@ -25,7 +25,7 @@ class TestLoad:
             json_file = json.load(file)
             payload = {
                 "data": json.dumps(json_file, indent=4),
-                "uri": "s3://mock-destination-bucket/file.csv",
+                "destination": "file.csv",
             }
 
             # When
@@ -49,7 +49,7 @@ class TestLoad:
 
             payload = {
                 "data": json.dumps(json_file, indent=4),
-                "uri": "s3://mock-destination-bucket/file.csv",
+                "destination": "file.csv",
             }
 
             # When
