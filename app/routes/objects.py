@@ -30,7 +30,6 @@ def list_objects(
 ):
     try:
         variables = get_env_variables(variables=["PROVIDER"])
-        print("variables", variables)
 
         provider = CloudProviderFactory().get_cloud_provider(variables["PROVIDER"])
         provider.connect()
