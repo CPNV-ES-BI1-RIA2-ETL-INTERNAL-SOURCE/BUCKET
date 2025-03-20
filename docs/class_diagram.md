@@ -4,7 +4,7 @@ classDiagram
         <<Interface>>        
         + connect() void
         + disconnect() void
-        + load(source : string) void
+        + load(source : string, destination : string) void
         + list(recurse : bool) string[]
     }
     
@@ -15,7 +15,6 @@ classDiagram
     CloudProvider <|-- AwsProvider
     class AwsProvider {
         - connectionString : string
-        - destinationName : string
         - accessKey : string
         - secretKey : string
         - bucket : string
@@ -25,7 +24,7 @@ classDiagram
         + AwsProvider(accessKey : string, secretKey : string, bucket : string, region : string, destination: string)
         + connect() void 
         + disconnect() void
-        + load(source : string) void
+        + load(source : string, destination: string) string
         + list(recurse : bool) string[]
     }
     
@@ -67,7 +66,4 @@ classDiagram
     class ListResponse {
     + objects: string[]
     }
-    
-    
-    
 ````
