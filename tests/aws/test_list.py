@@ -20,7 +20,6 @@ class TestList:
         # Given
         client = self.client_init()
         params = {
-            "uri": "s3://mock-bucket-name",
             "recurse": False
         }
 
@@ -41,7 +40,6 @@ class TestList:
         # Given
         client = self.client_init()
         params = {
-            "uri": "s3://mock-bucket-name",
             "recurse": False
         }
 
