@@ -4,7 +4,7 @@ from app.schemas.requests.load_request import LoadRequest
 from app.schemas.responses.load_response import LoadResponse
 from app.schemas.responses.list_response import ListResponse
 from app.exceptions.destination_not_found_exception import DestinationNotFoundException
-from app.services.environement_varriables import get_env_variables
+from app.services.environement_variables import get_env_variables
 
 router = APIRouter()
 apiPrefix = "/api/v2"

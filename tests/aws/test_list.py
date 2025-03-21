@@ -5,7 +5,7 @@ from unittest.mock import patch, Mock
 from botocore.exceptions import ClientError
 from fastapi.testclient import TestClient
 
-from app.exceptions.environement_varriables_exception import EnvironmentVariableException
+from app.exceptions.environement_variables_exception import EnvironmentVariableException
 from app.main import app
 
 
