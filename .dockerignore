@@ -1,4 +1,3 @@
-tests
 .git
 __pycache__
 docs
@@ -6,4 +5,4 @@ docs
 README.md
 LICENSE.txt
 .venv
-jobs
+.env*
