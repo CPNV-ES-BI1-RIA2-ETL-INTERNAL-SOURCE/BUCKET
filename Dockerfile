@@ -1,30 +1,43 @@
-# Use a basic image
-FROM python:3.13-slim
+FROM python:3.13-alpine AS builder
 
-# Define working directory
-WORKDIR /bucket
+WORKDIR /service
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    libpq-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+COPY Pipfile Pipfile.lock ./
 
-# Copy dependency files first
-COPY Pipfile Pipfile.lock /bucket/
-
-# Install pipenv globally
-RUN pip install --no-cache-dir pipenv
-
-# Install dependencies globally, without creating a virtual environment
+RUN pip install --no-cache-dir --no-input pipenv
 RUN pipenv install --system --deploy
 
-# Copy the rest of the application code
-COPY . /bucket
+# Test
+FROM builder AS test
+WORKDIR /service
 
-# Expose the specified port
+COPY tests ./tests
+COPY app ./app
+COPY tests/test.env ./.env
+
+RUN pipenv install --system --deploy --dev
+RUN python -m pytest
+
+# Runtime
+FROM python:3.13-alpine AS runtime
+
+# Set environment variables
+ARG AWS_ACCESS_KEY
+ARG AWS_SECRET_KEY
+ARG AWS_REGION
+ARG AWS_BUCKET
+ARG PROVIDER=s3
+ENV AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+ENV AWS_SECRET_KEY=${AWS_SECRET_KEY}
+ENV AWS_REGION=${AWS_REGION}
+ENV AWS_BUCKET=${AWS_BUCKET}
+ENV PROVIDER=${PROVIDER}
+
+WORKDIR /service
+
+COPY --from=builder /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
+COPY app ./app
+
 EXPOSE 8000
 
-# Configuring behavior to suit the environment
-CMD ["pipenv", "run", "fastapi", "run"]
+CMD ["python", "-m", "fastapi", "run", "--port", "8000"]
