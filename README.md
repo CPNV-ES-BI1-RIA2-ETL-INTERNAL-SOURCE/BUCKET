@@ -26,9 +26,6 @@ Here are few more dependencies need for Development :
 #### Production environment
 
 Copy and modify the .env file.
-````shell
-cp .env.example .env
-````
 
 Build the docker container.
 ````shell
@@ -37,13 +34,19 @@ docker build -t bucket_conector .
 
 Run the docker container.
 ````shell
-docker run -d -p 8000:8000 bucket_conector
+docker run -d -p 8000:8000 --env AWS_ACCESS_KEY=your_access_key --env AWS_SECRET_KEY=your_secret_key --env AWS_REGION=eu-south-1 --env AWS_BUCKET=your_bucket bucket_connector
 ````
 
 Check container.
 ````shell
 docker container ls -a
 ````
+#### Testing environment
+
+**Build the Docker container without cache for testing:**
+```shell
+docker build --no-cache --target test -t my-service-test .
+```
 
 The server is running on : [http://localhost:8000](http://localhost:8000)
 
@@ -132,6 +135,7 @@ pytest tests/aws/test_load.py
     * Issues are added to the [github issues page](https://github.com/CPNV-ES-BI1-SBB/EXTERNAL-SOURCE-LOAD-DATALAKE/issues)
 
 ### Commits
+
 * [How to commit](https://www.conventionalcommits.org/en/v1.0.0/)
 ```shell
 <type>(<scope>): <subject>
@@ -147,13 +151,40 @@ pytest tests/aws/test_load.py
 - **docs**: Writing or updating documentation.
 - **test**: Adding or modifying tests.
 
-examples :
+**Breaking Changes**: To indicate a breaking change, you can either:
+
+1. Add an exclamation mark `!` after the type (and scope, if present):
+   ```shell
+   <type>(<scope>)!: <subject>
+   ```
+   Example:
+   ```shell
+   feat(api)!: send an email to the customer when a product is shipped
+   ```
+   
+2. Include a `BREAKING CHANGE` footer in the commit message:
+   ```shell
+   <type>(<scope>): <subject>
+
+   BREAKING CHANGE: <description>
+   ```
+   Example:
+   ```shell
+   feat: allow provided config object to extend other configs
+
+   BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+   ```
+
+**When to Use `!` and `BREAKING CHANGE`**:
+
+- **Use `!`**: When the breaking change is straightforward and can be succinctly described in the commit header.
+  
+- **Use `BREAKING CHANGE`**: When the breaking change requires a more detailed explanation, especially if it affects external stakeholders or alters the public API significantly.
+
+**Simple Example**:
 ```shell
-feat(MyClass): add a button in the ...
-````
-```shell
-feat(example.js): change name into username
-````
+feat: add simple parser middleware to ...
+``` 
 
 ---
 
