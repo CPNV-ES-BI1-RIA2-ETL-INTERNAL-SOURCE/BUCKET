@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 import json
 from unittest.mock import patch, Mock
 from botocore.exceptions import ClientError
@@ -8,7 +11,7 @@ from app.main import app
 
 
 class TestLoad:
-    _JSON_FILE_PATH = "../stationboard-Lausanne-01.12.2024-00.01-ALL.json"
+    _JSON_FILE_PATH = "./tests/stationboard-Lausanne-01.12.2024-00.01-ALL.json"
 
     def client_init(self):
         try:
