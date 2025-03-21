@@ -31,7 +31,7 @@ ARG AWS_ACCESS_KEY
 ARG AWS_SECRET_KEY
 ARG AWS_REGION
 ARG AWS_BUCKET
-ARG PROVIDER = s3
+ARG PROVIDER=s3
 ENV AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
 ENV AWS_SECRET_KEY=${AWS_SECRET_KEY}
 ENV AWS_REGION=${AWS_REGION}
@@ -41,7 +41,6 @@ ENV PROVIDER=${PROVIDER}
 WORKDIR /service
 
 COPY --from=builder /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
-COPY tests ./tests
 COPY app ./app
 
 EXPOSE 8000
