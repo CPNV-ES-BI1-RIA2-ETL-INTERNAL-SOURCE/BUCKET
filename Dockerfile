@@ -11,14 +11,9 @@ RUN pipenv install --system --deploy
 FROM builder AS test
 WORKDIR /service
 
-ENV AWS_ACCESS_KEY=test
-ENV AWS_SECRET_KEY=test
-ENV AWS_REGION=test
-ENV AWS_BUCKET=test
-ENV PROVIDER=s3
-
 COPY tests ./tests
 COPY app ./app
+COPY tests/test.env ./.env
 
 RUN pipenv install --system --deploy --dev
 RUN python -m pytest
