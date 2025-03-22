@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 class LoadRequest(BaseModel):
-    data: str
+    file: str
     destination: str

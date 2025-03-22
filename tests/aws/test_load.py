@@ -8,10 +8,10 @@ from fastapi.testclient import TestClient
 
 from app.exceptions.environement_variables_exception import EnvironmentVariableException
 from app.main import app
-
+import io
 
 class TestLoad:
-    _JSON_FILE_PATH = "./tests/stationboard-Lausanne-01.12.2024-00.01-ALL.json"
+    _PDF_FILE_PATH = "./tests/sample.pdf"
 
     def client_init(self):
         try:
@@ -21,18 +21,20 @@ class TestLoad:
 
     @patch("app.cloud_provider.aws_provider.AwsProvider.connect", Mock(return_value=None))
     @patch("app.cloud_provider.aws_provider.AwsProvider.load", Mock(return_value="http://mock-data-source.com"))
-    def test_load_json_success(self):
+    def test_load_pdf_success(self):
         # Given
         client = self.client_init()
-        with open(self._JSON_FILE_PATH, "r") as file:
-            json_file = json.load(file)
+        with open(self._PDF_FILE_PATH, "rb") as file:
+            file_data = io.BytesIO(file.read())
             payload = {
-                "data": json.dumps(json_file, indent=4),
-                "destination": "file.csv",
+                "file": ("sample.pdf", file_data, "application/pdf"),
             }
 
             # When
-            response = client.post("/api/v2/objects", json=payload)
+            response = client.post(
+                "/api/v2/objects?destination=uploads/documents",
+                files=payload
+            )
 
             # Then
             assert response.status_code == 200
@@ -47,16 +49,17 @@ class TestLoad:
     def test_document_already_exists(self):
         # Given
         client = self.client_init()
-        with open(self._JSON_FILE_PATH, "rb") as file:
-            json_file = json.load(file)
-
+        with open(self._PDF_FILE_PATH, "rb") as file:
+            file_data = io.BytesIO(file.read())
             payload = {
-                "data": json.dumps(json_file, indent=4),
-                "destination": "file.csv",
+                "file": ("sample.pdf", file_data, "application/pdf"),
             }
 
             # When
-            response = client.post("/api/v2/objects", json=payload)
+            response = client.post(
+                "/api/v2/objects?destination=uploads/documents",
+                files=payload
+            )
 
             # Then
             assert response.status_code == 500
