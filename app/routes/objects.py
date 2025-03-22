@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, File, UploadFile
 from app.cloud_provider.cloud_provider_factory import CloudProviderFactory
 from app.schemas.requests.load_request import LoadRequest
 from app.schemas.responses.load_response import LoadResponse
@@ -8,16 +8,16 @@ from app.services.environement_variables import get_env_variables
 
 router = APIRouter()
 
-
 @router.post('/objects', response_model=LoadResponse)
-def load_object(request: LoadRequest):
+async def load_object(destination: str, file: UploadFile = File(...)):
     try:
         variables = get_env_variables(variables=["PROVIDER"])
-
         provider = CloudProviderFactory().get_cloud_provider(variables["PROVIDER"])
-
         provider.connect()
-        url = provider.load(data=request.data, destination=request.destination)
+
+        file_content = await file.read()
+
+        url = provider.load(data=file_content, destination=destination)
 
         return LoadResponse(url=url)
 
