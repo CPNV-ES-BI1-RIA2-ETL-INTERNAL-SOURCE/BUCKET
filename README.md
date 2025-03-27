@@ -143,8 +143,8 @@ pytest tests/aws/test_load.py
 
 - **build**: Changes that affect the build system or external dependencies (e.g., npm, make, etc.).
 - **ci**: Changes related to integration or configuration files and scripts (e.g., Travis, Ansible, BrowserStack, etc.).
-- **feat**: Adding a new feature.
-- **fix**: Bug fixes.
+- **feat**: Adding a new feature. // this will bump the 2nd number in the semantic versioning
+- **fix**: Bug fixes. // this will bump the 3rd number in the semantic versioning
 - **perf**: Performance improvements.
 - **refactor**: Modifications that neither add a new feature nor improve performance.
 - **style**: Changes that do not affect functionality or semantics (e.g., indentation, formatting, adding spaces, renaming a variable, etc.).
