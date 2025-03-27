@@ -9,18 +9,20 @@ from app.exceptions.environement_variables_exception import EnvironmentVariableE
 from app.main import app
 
 
+def client_init():
+    try:
+        return TestClient(app)
+    except EnvironmentVariableException as e:
+        print("Error:", e)
+
+
 class TestList:
-    def client_init(self):
-        try:
-            return TestClient(app)
-        except EnvironmentVariableException as e:
-            print("Error:", e)
 
     @patch("app.cloud_provider.aws_provider.AwsProvider.connect", Mock(return_value=None))
     @patch("app.cloud_provider.aws_provider.AwsProvider.list", Mock(return_value=["file1.txt", "file2.txt"]))
     def test_list_objects_success(self):
         # Given
-        client = self.client_init()
+        client = client_init()
         params = {
             "recurse": False
         }
@@ -40,7 +42,7 @@ class TestList:
     }, "ListObjectsV2")))
     def test_list_objects_access_denied(self):
         # Given
-        client = self.client_init()
+        client = client_init()
         params = {
             "recurse": False
         }
@@ -68,7 +70,7 @@ class TestList:
         }
 
         # Given
-        client = self.client_init()
+        client = client_init()
         params = {
             "recurse": True
         }

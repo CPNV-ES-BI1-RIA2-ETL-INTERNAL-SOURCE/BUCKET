@@ -1,6 +1,6 @@
 ````mermaid
 sequenceDiagram
-    Actor API
+    actor API
     API ->>+ main : 
     main ->>+ CloudProviderFactory : get_cloud_provider()
     activate CloudProviderFactory

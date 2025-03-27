@@ -8,6 +8,7 @@ from app.services.environement_variables import get_env_variables
 
 router = APIRouter()
 
+
 @router.post('/objects', response_model=LoadResponse)
 async def load_object(destination: str, file: UploadFile = File(...)):
     try:
@@ -24,9 +25,10 @@ async def load_object(destination: str, file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error : {str(e)}")
 
+
 @router.get('/objects', response_model=ListResponse)
 def list_objects(
-    recurse: bool = Query(False, description="Whether to list objects recursively")
+        recurse: bool = Query(False, description="Whether to list objects recursively")
 ):
     try:
         variables = get_env_variables(variables=["PROVIDER"])

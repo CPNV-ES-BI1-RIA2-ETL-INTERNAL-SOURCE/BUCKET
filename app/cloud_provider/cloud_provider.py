@@ -1,5 +1,6 @@
 from typing import List
 
+
 class CloudProvider:
     def connect(self) -> None:
         pass

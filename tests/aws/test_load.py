@@ -10,20 +10,22 @@ from app.exceptions.environement_variables_exception import EnvironmentVariableE
 from app.main import app
 import io
 
+
+def client_init():
+    try:
+        return TestClient(app)
+    except EnvironmentVariableException as e:
+        print("Error:", e)
+
+
 class TestLoad:
     _PDF_FILE_PATH = "./tests/sample.pdf"
-
-    def client_init(self):
-        try:
-            return TestClient(app)
-        except EnvironmentVariableException as e:
-            print("Error:", e)
 
     @patch("app.cloud_provider.aws_provider.AwsProvider.connect", Mock(return_value=None))
     @patch("app.cloud_provider.aws_provider.AwsProvider.load", Mock(return_value="http://mock-data-source.com"))
     def test_load_pdf_success(self):
         # Given
-        client = self.client_init()
+        client = client_init()
         with open(self._PDF_FILE_PATH, "rb") as file:
             file_data = io.BytesIO(file.read())
             payload = {
@@ -48,7 +50,7 @@ class TestLoad:
     @patch("app.cloud_provider.aws_provider.AwsProvider.load", Mock(return_value="http://mock-data-source.com"))
     def test_document_already_exists(self):
         # Given
-        client = self.client_init()
+        client = client_init()
         with open(self._PDF_FILE_PATH, "rb") as file:
             file_data = io.BytesIO(file.read())
             payload = {
