@@ -2,7 +2,7 @@
 sequenceDiagram
     actor API
     API ->>+ main : request
-    main ->>+ CloudProviderFactory : get_cloud_provider()
+    main ->>+ CloudProviderFactory : get_cloud_provider(provider)
     activate CloudProviderFactory
     CloudProviderFactory -->>- main : provider response CloudProvider
     
