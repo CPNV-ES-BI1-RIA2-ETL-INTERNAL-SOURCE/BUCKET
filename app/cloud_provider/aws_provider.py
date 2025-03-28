@@ -42,7 +42,7 @@ class AwsProvider(CloudProvider):
         self._connection.close()
         self._connection = None  # Optional, but explicit
 
-    def load(self, data: str, destination: str) -> str:
+    def load(self, data: bytes, destination: str) -> str:
         """
         Upload a binary object to the specified bucket.
 

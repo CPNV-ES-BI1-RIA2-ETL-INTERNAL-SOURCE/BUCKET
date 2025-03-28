@@ -4,7 +4,7 @@ classDiagram
         <<Interface>>        
         + connect() void
         + disconnect() void
-        + load(source : string, destination : string) void
+        + load(data : bytes, destination : string) void
         + list(recurse : bool) string[]
     }
     
@@ -24,7 +24,7 @@ classDiagram
         + AwsProvider(accessKey : string, secretKey : string, bucket : string, region : string, destination: string)
         + connect() void 
         + disconnect() void
-        + load(source : string, destination: string) string
+        + load(data : bytes, destination: string) string
         + list(recurse : bool) string[]
     }
     
@@ -53,7 +53,7 @@ classDiagram
     
     LoadRequest <|-- BaseModel
     class LoadRequest {
-    + data: string
+    + data: bytes
     + uri: string
     }
     
